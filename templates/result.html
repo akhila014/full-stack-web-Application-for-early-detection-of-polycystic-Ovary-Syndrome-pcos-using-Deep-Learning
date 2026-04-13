@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagnostic Results | BVRIT</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .result-card { text-align: center; padding: 20px; border-radius: 10px; margin-top: 20px; }
+        .pcos-positive { background-color: #ffebee; border: 2px solid #ef9a9a; color: #b71c1c; }
+        .pcos-negative { background-color: #e8f5e9; border: 2px solid #a5d6a7; color: #1b5e20; }
+        .advice-box { background: #fff; padding: 20px; border-radius: 8px; margin-top: 20px; text-align: left; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .diet-grid { display: flex; justify-content: space-between; gap: 20px; margin-top: 15px; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Diagnostic Report</h2>
+        <p class="subtitle">Report Generated: {{ date }}</p>
+
+        <!-- Result -->
+        <div class="result-card {{ 'pcos-positive' if prediction == 'PCOS Detected' else 'pcos-negative' }}">
+            <h3>Classification: {{ prediction }}</h3>
+        </div>
+
+        <!-- Advice -->
+        <div class="advice-box">
+            <h4 style="color: var(--primary-teal); margin-top: 0;">
+                Health Recommendations:
+            </h4>
+
+            <p>{{ advice }}</p>
+
+            <hr>
+
+            <div class="diet-grid">
+
+                {% if prediction == "PCOS Detected" %}
+
+                <!-- 🔴 PCOS CASE -->
+                <div style="flex: 1;">
+                    <strong style="color: #2e7d32;">✅ Recommended:</strong>
+                    <ul style="padding-left: 20px;">
+                        <li>Consult a gynecologist or endocrinologist</li>
+                        <li>Follow a low GI diet (fiber-rich foods)</li>
+                        <li>Exercise daily (30–45 minutes)</li>
+                        <li>Manage stress with yoga/meditation</li>
+                        <li>Track menstrual cycle regularly</li>
+                    </ul>
+                </div>
+
+                <div style="flex: 1;">
+                    <strong style="color: #c62828;">❌ Limit/Avoid:</strong>
+                    <ul style="padding-left: 20px;">
+                        <li>Sugary foods (soft drinks, sweets)</li>
+                        <li>Refined carbs (white bread, pasta)</li>
+                        <li>Junk & processed food</li>
+                        <li>Fried foods and trans fats</li>
+                        <li>Excess caffeine</li>
+                    </ul>
+                </div>
+
+                {% else %}
+
+                <!-- 🟢 NO PCOS CASE -->
+                <div style="flex: 1;">
+                    <strong style="color: #2e7d32;">✅ Healthy Habits:</strong>
+                    <ul style="padding-left: 20px;">
+                        <li>Maintain a balanced diet</li>
+                        <li>Stay physically active</li>
+                        <li>Drink enough water daily</li>
+                        <li>Maintain healthy body weight</li>
+                        <li>Get regular health checkups</li>
+                    </ul>
+                </div>
+
+                <div style="flex: 1;">
+                    <strong style="color: #c62828;">⚠️ Be Careful:</strong>
+                    <ul style="padding-left: 20px;">
+                        <li>Avoid excessive junk food</li>
+                        <li>Limit sugary drinks</li>
+                        <li>Avoid sedentary lifestyle</li>
+                        <li>Reduce stress levels</li>
+                        <li>Maintain proper sleep routine</li>
+                    </ul>
+                </div>
+
+                {% endif %}
+
+            </div>
+        </div>
+
+        <!-- Button -->
+        <button onclick="window.location.href='/'" style="background-color: #666; margin-top: 25px;">
+            Back to Home
+        </button>
+
+        <div class="footer-text">
+            B V Raju Institute of Technology - Department of CSE
+        </div>
+    </div>
+</body>
+</html>

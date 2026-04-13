@@ -1,0 +1,101 @@
+/* Modern Medical Theme */
+:root {
+    --primary-teal: #008080;
+    --secondary-blue: #e0f2f1;
+    --text-dark: #333;
+    --white: #ffffff;
+    --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f7f6;
+    color: var(--text-dark);
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.container {
+    background: var(--white);
+    padding: 2.5rem;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    width: 100%;
+    max-width: 500px;
+}
+
+h2 {
+    color: var(--primary-teal);
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+}
+
+p.subtitle {
+    text-align: center;
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: -1rem;
+    margin-bottom: 2rem;
+}
+
+.form-group {
+    margin-bottom: 1.2rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+input[type="number"],
+textarea,
+input[type="file"] {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-sizing: border-box; /* Crucial for padding */
+    font-size: 1rem;
+}
+
+textarea {
+    height: 80px;
+    resize: none;
+}
+
+input:focus {
+    outline: none;
+    border-color: var(--primary-teal);
+    box-shadow: 0 0 5px rgba(0, 128, 128, 0.2);
+}
+
+button {
+    width: 100%;
+    padding: 1rem;
+    background-color: var(--primary-teal);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    margin-top: 1rem;
+}
+
+button:hover {
+    background-color: #006666;
+}
+
+.footer-text {
+    text-align: center;
+    font-size: 0.75rem;
+    color: #999;
+    margin-top: 2rem;
+}

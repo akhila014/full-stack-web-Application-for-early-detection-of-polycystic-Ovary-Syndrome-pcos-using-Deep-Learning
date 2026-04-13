@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PCOS Detection System | BVRIT</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>PCOS Detection System</h2>
+        <p class="subtitle">AI-Powered Early Diagnosis & Screening</p>
+        
+        <form action="/predict" method="post" enctype="multipart/form-data">
+            
+            <div class="form-group">
+                <label for="age">Patient Age</label>
+                <input type="number" id="age" name="age" placeholder="e.g. 24" required>
+            </div>
+
+            <div class="form-group">
+                <label for="symptoms">Clinical Symptoms (Health Data Input)</label>
+                <textarea id="symptoms" name="symptoms" 
+                    placeholder="e.g., Irregular periods, weight gain, hair growth, acne..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="ultrasound">Upload Ultrasound Image</label>
+                <input type="file" id="ultrasound" name="ultrasound" accept="image/*" required>
+                <small style="color: #666; font-size: 0.8rem; display: block; margin-top: 5px;">
+                    Supported formats: JPG, PNG (Max 5MB)
+                </small>
+            </div>
+
+            <button type="submit" id="submit-btn">Generate Diagnosis</button>
+        </form>
+        
+        <div class="footer-text">
+            © The PCOS Detection System
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
