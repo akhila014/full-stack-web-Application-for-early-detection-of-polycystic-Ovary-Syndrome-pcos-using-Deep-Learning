@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Records | BVRIT</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .container { max-width: 950px; }
+        .top-bar { display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem; }
+        .logout-btn { background:#c62828; color:white; border:none; padding:8px 18px;
+                      border-radius:6px; cursor:pointer; font-size:0.85rem; font-weight:600; }
+        .logout-btn:hover { background:#b71c1c; }
+        table { width:100%; border-collapse:collapse; margin-top:1rem; font-size:0.85rem; }
+        th, td { padding:10px 14px; border:1px solid #ddd; text-align:left; vertical-align:top; }
+        th { background-color:#008080; color:white; }
+        tr:nth-child(even) { background-color:#f4f7f6; }
+        .badge { padding:4px 10px; border-radius:12px; font-size:0.78rem; font-weight:600; white-space:nowrap; }
+        .badge-positive  { background:#ffebee; color:#b71c1c; }
+        .badge-negative  { background:#e8f5e9; color:#1b5e20; }
+        .badge-suspected { background:#fff8e1; color:#e65100; }
+        .no-data { text-align:center; color:#888; padding:2rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="top-bar">
+            <h2 style="margin:0;">Patient Records</h2>
+            <button class="logout-btn" onclick="window.location.href='/logout'">&#128274; Logout</button>
+        </div>
+        <p class="subtitle">Total Records: <strong>{{ records|length }}</strong></p>
+
+        {% if records %}
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Age</th>
+                    <th>Symptoms Reported</th>
+                    <th>Prediction</th>
+                    <th>Image File</th>
+                    <th>Date &amp; Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in records %}
+                <tr>
+                    <td>{{ r.id }}</td>
+                    <td>{{ r.age }}</td>
+                    <td>{{ r.symptoms }}</td>
+                    <td>
+                        <span class="badge
+                            {% if r.prediction == 'PCOS Detected' %}badge-positive
+                            {% elif r.prediction == 'No PCOS Detected' %}badge-negative
+                            {% else %}badge-suspected{% endif %}">
+                            {{ r.prediction }}
+                        </span>
+                    </td>
+                    <td>{{ r.image_path }}</td>
+                    <td>{{ r.date_created.strftime('%d %b %Y, %I:%M %p') if r.date_created else '-' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="no-data">No records stored yet. Run a prediction first.</p>
+        {% endif %}
+
+        <button onclick="window.location.href='/'" style="background-color:#666; margin-top:25px;">
+            &#8592; Back to Home
+        </button>
+
+        <div class="footer-text">B V Raju Institute of Technology &mdash; Department of CSE</div>
+    </div>
+</body>
+</html>

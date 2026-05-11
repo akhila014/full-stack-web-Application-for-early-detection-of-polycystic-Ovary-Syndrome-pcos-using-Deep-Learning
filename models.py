@@ -6,11 +6,11 @@ db = SQLAlchemy()
 
 class PCOSRecord(db.Model):
     __tablename__ = 'pcos_records'
-    
+
     id = db.Column(db.Integer, primary_key=True)
     age = db.Column(db.Integer, nullable=False)
     symptoms = db.Column(db.Text, nullable=False)
-    prediction = db.Column(db.String(20), nullable=False, index=True)
+    prediction = db.Column(db.String(50), nullable=False, index=True)
     image_path = db.Column(db.String(255), nullable=False)
     date_created = db.Column(db.DateTime(timezone=True), server_default=func.now(), index=True)
 

@@ -6,11 +6,58 @@
     <title>Diagnostic Results | BVRIT</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <style>
-        .result-card { text-align: center; padding: 20px; border-radius: 10px; margin-top: 20px; }
-        .pcos-positive { background-color: #ffebee; border: 2px solid #ef9a9a; color: #b71c1c; }
-        .pcos-negative { background-color: #e8f5e9; border: 2px solid #a5d6a7; color: #1b5e20; }
-        .advice-box { background: #fff; padding: 20px; border-radius: 8px; margin-top: 20px; text-align: left; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .diet-grid { display: flex; justify-content: space-between; gap: 20px; margin-top: 15px; font-size: 0.9rem; }
+        .result-card {
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        .pcos-positive {
+            background-color: #ffebee;
+            border: 2px solid #ef9a9a;
+            color: #b71c1c;
+        }
+        .pcos-negative {
+            background-color: #e8f5e9;
+            border: 2px solid #a5d6a7;
+            color: #1b5e20;
+        }
+        .pcos-suspected {
+            background-color: #fff8e1;
+            border: 2px solid #ffe082;
+            color: #e65100;
+        }
+        .pcos-invalid {
+            background-color: #f3e5f5;
+            border: 2px solid #ce93d8;
+            color: #4a148c;
+        }
+        .advice-box {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: left;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .diet-grid {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            margin-top: 15px;
+            font-size: 0.9rem;
+        }
+        .confidence-bar-wrap {
+            background: #e0e0e0;
+            border-radius: 6px;
+            height: 10px;
+            margin: 8px 0 4px 0;
+        }
+        .confidence-bar {
+            height: 10px;
+            border-radius: 6px;
+            background: #008080;
+        }
     </style>
 </head>
 <body>
@@ -18,54 +65,64 @@
         <h2>Diagnostic Report</h2>
         <p class="subtitle">Report Generated: {{ date }}</p>
 
-        <!-- Result -->
-        <div class="result-card {{ 'pcos-positive' if prediction == 'PCOS Detected' else 'pcos-negative' }}">
-            <h3>Classification: {{ prediction }}</h3>
+        {% if prediction == "Invalid Image Uploaded" %}
+
+        <!-- INVALID IMAGE CASE -->
+        <div class="result-card pcos-invalid">
+            <h3>&#10060; Invalid Image Uploaded</h3>
+        </div>
+        <div class="advice-box">
+            <h4 style="color:#4a148c; margin-top:0;">Image Validation Failed</h4>
+            <p>{{ advice }}</p>
         </div>
 
-        <!-- Advice -->
+        {% else %}
+
+        <!-- VALID PREDICTION CASE -->
+        <div class="result-card
+            {% if prediction == 'PCOS Detected' %}pcos-positive
+            {% elif prediction == 'No PCOS Detected' %}pcos-negative
+            {% else %}pcos-suspected{% endif %}">
+            <h3>Classification: {{ prediction }}</h3>
+            {% if confidence > 0 %}
+            <p style="margin:4px 0 0 0; font-size:0.9rem;">Confidence: {{ confidence }}%</p>
+            <div class="confidence-bar-wrap">
+                <div class="confidence-bar" style="width:{{ confidence }}%;"></div>
+            </div>
+            {% endif %}
+        </div>
+
         <div class="advice-box">
-            <h4 style="color: var(--primary-teal); margin-top: 0;">
-                Health Recommendations:
-            </h4>
-
+            <h4 style="color:var(--primary-teal); margin-top:0;">Health Recommendations</h4>
             <p>{{ advice }}</p>
-
             <hr>
 
             <div class="diet-grid">
-
-                {% if prediction == "PCOS Detected" %}
-
-                <!-- 🔴 PCOS CASE -->
-                <div style="flex: 1;">
-                    <strong style="color: #2e7d32;">✅ Recommended:</strong>
-                    <ul style="padding-left: 20px;">
-                        <li>Consult a gynecologist or endocrinologist</li>
-                        <li>Follow a low GI diet (fiber-rich foods)</li>
+                {% if prediction == "PCOS Detected" or "Suspected" in prediction or prediction == "PCOS Possible" %}
+                <div style="flex:1;">
+                    <strong style="color:#2e7d32;">&#10003; Recommended:</strong>
+                    <ul style="padding-left:20px;">
+                        <li>Consult a gynaecologist or endocrinologist</li>
+                        <li>Follow a low GI diet (fibre-rich foods)</li>
                         <li>Exercise daily (30–45 minutes)</li>
                         <li>Manage stress with yoga/meditation</li>
                         <li>Track menstrual cycle regularly</li>
                     </ul>
                 </div>
-
-                <div style="flex: 1;">
-                    <strong style="color: #c62828;">❌ Limit/Avoid:</strong>
-                    <ul style="padding-left: 20px;">
+                <div style="flex:1;">
+                    <strong style="color:#c62828;">&#10007; Limit/Avoid:</strong>
+                    <ul style="padding-left:20px;">
                         <li>Sugary foods (soft drinks, sweets)</li>
                         <li>Refined carbs (white bread, pasta)</li>
-                        <li>Junk & processed food</li>
+                        <li>Junk &amp; processed food</li>
                         <li>Fried foods and trans fats</li>
                         <li>Excess caffeine</li>
                     </ul>
                 </div>
-
                 {% else %}
-
-                <!-- 🟢 NO PCOS CASE -->
-                <div style="flex: 1;">
-                    <strong style="color: #2e7d32;">✅ Healthy Habits:</strong>
-                    <ul style="padding-left: 20px;">
+                <div style="flex:1;">
+                    <strong style="color:#2e7d32;">&#10003; Healthy Habits:</strong>
+                    <ul style="padding-left:20px;">
                         <li>Maintain a balanced diet</li>
                         <li>Stay physically active</li>
                         <li>Drink enough water daily</li>
@@ -73,10 +130,9 @@
                         <li>Get regular health checkups</li>
                     </ul>
                 </div>
-
-                <div style="flex: 1;">
-                    <strong style="color: #c62828;">⚠️ Be Careful:</strong>
-                    <ul style="padding-left: 20px;">
+                <div style="flex:1;">
+                    <strong style="color:#c62828;">&#9888; Be Careful:</strong>
+                    <ul style="padding-left:20px;">
                         <li>Avoid excessive junk food</li>
                         <li>Limit sugary drinks</li>
                         <li>Avoid sedentary lifestyle</li>
@@ -84,19 +140,18 @@
                         <li>Maintain proper sleep routine</li>
                     </ul>
                 </div>
-
                 {% endif %}
-
             </div>
         </div>
 
-        <!-- Button -->
-        <button onclick="window.location.href='/'" style="background-color: #666; margin-top: 25px;">
-            Back to Home
+        {% endif %}
+
+        <button onclick="window.location.href='/'" style="background-color:#666; margin-top:25px;">
+            &#8592; Back to Home
         </button>
 
         <div class="footer-text">
-            B V Raju Institute of Technology - Department of CSE
+            B V Raju Institute of Technology &mdash; Department of CSE
         </div>
     </div>
 </body>
